@@ -4,3 +4,4 @@
 .eggs/
 nosetests.xml
 /venv/
+.cache
