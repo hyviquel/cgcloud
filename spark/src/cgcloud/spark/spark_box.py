@@ -25,10 +25,10 @@ ephemeral_dir = '/mnt/ephemeral'
 persistent_dir = '/mnt/persistent'
 var_dir = '/var/lib/sparkbox'
 hdfs_replication = 1
-hadoop_version = '2.6.0'
-spark_version = '1.5.2'
+hadoop_version = '2.7.3'
+spark_version = '2.0.0'
 # The major version of Hadoop that the Spark binaries were built against 
-spark_hadoop_version = '2.6'
+spark_hadoop_version = '2.7'
 
 Service = namedtuple( 'Service', [
     'init_name',
