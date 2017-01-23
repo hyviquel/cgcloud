@@ -33,12 +33,12 @@ class BaseSparkClusterTests( CoreTestCase ):
         os.environ[ 'CGCLOUD_PLUGINS' ] = 'cgcloud.spark'
         super( BaseSparkClusterTests, cls ).setUpClass( )
         if cls.create_image:
-            cls._cgcloud( 'create', self.node, '-IT' )
+            cls._cgcloud( 'create', cls.node, '-IT' )
 
     @classmethod
     def tearDownClass( cls ):
         if cls.cleanup and cls.create_image:
-            cls._cgcloud( 'delete-image', self.node )
+            cls._cgcloud( 'delete-image', cls.node )
         super( BaseSparkClusterTests, cls ).tearDownClass( )
 
     def test_wordcount( self ):
