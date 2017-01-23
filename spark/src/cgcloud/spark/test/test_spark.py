@@ -4,24 +4,27 @@ from textwrap import dedent
 import time
 import logging
 import unittest
+from abc import ABCMeta
 
 from cgcloud.core.test import CoreTestCase
-from cgcloud.spark.spark_box import install_dir, SparkBox, SparkMaster, SparkSlave
+from cgcloud.spark.spark_box import install_dir, SparkBox, Spark2Box, SparkMaster, SparkSlave
 
 log = logging.getLogger( __name__ )
 
 master = SparkMaster.role( )
 slave = SparkSlave.role( )
-node = SparkBox.role( )
 
 num_slaves = 2
 
 
-class SparkClusterTests( CoreTestCase ):
+class BaseSparkClusterTests( CoreTestCase ):
     """
     Covers the creation of a Spark cluster from scratch and running a simple Spark job on it.
     Also covers persistant HDFS between two cluster incarnations.
     """
+    __metaclass__ = ABCMeta
+
+    node = NotImplemented
     cleanup = True
     create_image = True
 
@@ -30,12 +33,12 @@ class SparkClusterTests( CoreTestCase ):
         os.environ[ 'CGCLOUD_PLUGINS' ] = 'cgcloud.spark'
         super( SparkClusterTests, cls ).setUpClass( )
         if cls.create_image:
-            cls._cgcloud( 'create', node, '-IT' )
+            cls._cgcloud( 'create', self.node, '-IT' )
 
     @classmethod
     def tearDownClass( cls ):
         if cls.cleanup and cls.create_image:
-            cls._cgcloud( 'delete-image', node )
+            cls._cgcloud( 'delete-image', self.node )
         super( SparkClusterTests, cls ).tearDownClass( )
 
     def test_wordcount( self ):
@@ -131,3 +134,18 @@ class SparkClusterTests( CoreTestCase ):
 
     def _delete_volumes( self ):
         pass
+
+class SparkClusterTests( BaseSparkClusterTests ):
+    """
+    Covers the creation of a Spark v1.x cluster from scratch and running a simple Spark job on it.
+    Also covers persistant HDFS between two cluster incarnations.
+    """
+    node = SparkBox.role( )
+
+
+class Spark2ClusterTests( BaseSparkClusterTests ):
+    """
+    Covers the creation of a Spark v2.x cluster from scratch and running a simple Spark job on it.
+    Also covers persistant HDFS between two cluster incarnations.
+    """
+    node = Spark2Box.role( )
