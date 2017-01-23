@@ -27,7 +27,8 @@ var_dir = '/var/lib/sparkbox'
 hdfs_replication = 1
 hadoop_version = '2.6.0'
 spark_version = '1.6.2'
-# The major version of Hadoop that the Spark binaries were built against 
+spark2_version = '2.1.0'
+# The major version of Hadoop that the Spark binaries were built against
 spark_hadoop_version = '2.6'
 
 Service = namedtuple( 'Service', [
@@ -430,6 +431,14 @@ class SparkBox( ApacheSoftwareBox,
                             # Spark's and Hadoop's sbin
                             f.write( fmt( 'PATH="$PATH:{install_dir}/{package}/bin"\n' ) )
 
+class Spark2Box( SparkBox ):
+    """
+    A node in a Spark v2.x cluster; used only to create an image for master and worker boxes
+    """
+
+    def __init__( self, ctx ):
+        super( Spark2Box, self ).__init__( ctx )
+        spark_version = spark2_version
 
 class SparkMaster( SparkBox, ClusterLeader ):
     """

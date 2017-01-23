@@ -1,5 +1,5 @@
 def roles( ):
-    from cgcloud.spark.spark_box import SparkBox, SparkSlave, SparkMaster
+    from cgcloud.spark.spark_box import SparkBox, Spark2Box, SparkSlave, SparkMaster
     return sorted( locals( ).values( ), key=lambda cls: cls.__name__ )
 
 
