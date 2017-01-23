@@ -25,11 +25,6 @@ ephemeral_dir = '/mnt/ephemeral'
 persistent_dir = '/mnt/persistent'
 var_dir = '/var/lib/sparkbox'
 hdfs_replication = 1
-hadoop_version = '2.6.0'
-spark_version = '1.6.2'
-spark2_version = '2.1.0'
-# The major version of Hadoop that the Spark binaries were built against
-spark_hadoop_version = '2.6'
 
 Service = namedtuple( 'Service', [
     'init_name',
@@ -82,6 +77,11 @@ class SparkBox( ApacheSoftwareBox,
     node. This implies that the master is started first. As soon as its private IP is assigned,
     typically seconds after the reservation has been submitted, the slaves can be started up.
     """
+
+    hadoop_version = '2.6.0'
+    spark_version = '1.6.2'
+    # The major version of Hadoop that the Spark binaries were built against
+    spark_hadoop_version = '2.6'
 
     @classmethod
     def get_role_options( cls ):
@@ -190,7 +190,7 @@ class SparkBox( ApacheSoftwareBox,
     @fabric_task
     def __install_hadoop( self ):
         # Download and extract Hadoop
-        path = fmt( 'hadoop/common/hadoop-{hadoop_version}/hadoop-{hadoop_version}.tar.gz' )
+        path = fmt( 'hadoop/common/hadoop-{self.hadoop_version}/hadoop-{self.hadoop_version}.tar.gz' )
         self._install_apache_package( path, install_dir )
 
         # Add environment variables to hadoop_env.sh
@@ -259,7 +259,7 @@ class SparkBox( ApacheSoftwareBox,
     @fabric_task
     def __install_spark( self ):
         # Download and extract Spark
-        path = fmt( 'spark/spark-{spark_version}/spark-{spark_version}-bin-hadoop{spark_hadoop_version}.tgz' )
+        path = fmt( 'spark/spark-{self.spark_version}/spark-{self.spark_version}-bin-hadoop{self.spark_hadoop_version}.tgz' )
         self._install_apache_package( path, install_dir )
 
         spark_dir = var_dir + "/spark"
@@ -436,9 +436,13 @@ class Spark2Box( SparkBox ):
     A node in a Spark v2.x cluster; used only to create an image for master and worker boxes
     """
 
+    hadoop_version = '2.7.3'
+    spark_version = '2.1.0'
+    # The major version of Hadoop that the Spark binaries were built against
+    spark_hadoop_version = '2.7'
+
     def __init__( self, ctx ):
         super( Spark2Box, self ).__init__( ctx )
-        spark_version = spark2_version
 
 class SparkMaster( SparkBox, ClusterLeader ):
     """
