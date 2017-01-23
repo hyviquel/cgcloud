@@ -31,7 +31,7 @@ class BaseSparkClusterTests( CoreTestCase ):
     @classmethod
     def setUpClass( cls ):
         os.environ[ 'CGCLOUD_PLUGINS' ] = 'cgcloud.spark'
-        super( SparkClusterTests, cls ).setUpClass( )
+        super( BaseSparkClusterTests, cls ).setUpClass( )
         if cls.create_image:
             cls._cgcloud( 'create', self.node, '-IT' )
 
@@ -39,7 +39,7 @@ class BaseSparkClusterTests( CoreTestCase ):
     def tearDownClass( cls ):
         if cls.cleanup and cls.create_image:
             cls._cgcloud( 'delete-image', self.node )
-        super( SparkClusterTests, cls ).tearDownClass( )
+        super( BaseSparkClusterTests, cls ).tearDownClass( )
 
     def test_wordcount( self ):
         self._create_cluster( )
