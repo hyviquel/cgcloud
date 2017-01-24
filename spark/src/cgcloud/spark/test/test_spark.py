@@ -141,6 +141,7 @@ class SparkClusterTests( BaseSparkClusterTests ):
     Covers the creation of a Spark v1.x cluster from scratch and running a simple Spark job on it.
     Also covers persistant HDFS between two cluster incarnations.
     """
+    __test__ = True
     node = SparkBox.role( )
 
 
@@ -149,4 +150,5 @@ class Spark2ClusterTests( BaseSparkClusterTests ):
     Covers the creation of a Spark v2.x cluster from scratch and running a simple Spark job on it.
     Also covers persistant HDFS between two cluster incarnations.
     """
+    __test__ = True
     node = Spark2Box.role( )
