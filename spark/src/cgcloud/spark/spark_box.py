@@ -108,7 +108,11 @@ class SparkBox( ApacheSoftwareBox,
             dict( ip_protocol='tcp', from_port=0, to_port=65535,
                   src_security_group_group_id=group_id ),
             dict( ip_protocol='udp', from_port=0, to_port=65535,
-                  src_security_group_group_id=group_id ) ]
+                  src_security_group_group_id=group_id ),
+            dict( ip_protocol='tcp', from_port=8080, to_port=8081,
+                  cidr_ip='0.0.0.0/0' ),
+            dict( ip_protocol='tcp', from_port=4040, to_port=4045,
+                  cidr_ip='0.0.0.0/0' )]
 
     def _get_iam_ec2_role( self ):
         iam_role_name, policies = super( SparkBox, self )._get_iam_ec2_role( )
