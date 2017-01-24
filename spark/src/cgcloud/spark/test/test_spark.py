@@ -23,6 +23,7 @@ class BaseSparkClusterTests( CoreTestCase ):
     Also covers persistant HDFS between two cluster incarnations.
     """
     __metaclass__ = ABCMeta
+    __test__ = False
 
     node = NotImplemented
     cleanup = True
