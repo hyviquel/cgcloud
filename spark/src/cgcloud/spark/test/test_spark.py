@@ -23,14 +23,19 @@ class BaseSparkClusterTests( CoreTestCase ):
     Also covers persistant HDFS between two cluster incarnations.
     """
     __metaclass__ = ABCMeta
-    __test__ = False
 
     node = NotImplemented
     cleanup = True
     create_image = True
 
     @classmethod
+    @abc.abstractmethod
+    def initNode( cls ):
+        raise NotImplementedError("Abstract method")
+
+    @classmethod
     def setUpClass( cls ):
+        cls.initNode
         os.environ[ 'CGCLOUD_PLUGINS' ] = 'cgcloud.spark'
         super( BaseSparkClusterTests, cls ).setUpClass( )
         if cls.create_image:
@@ -41,6 +46,7 @@ class BaseSparkClusterTests( CoreTestCase ):
         if cls.cleanup and cls.create_image:
             cls._cgcloud( 'delete-image', cls.node )
         super( BaseSparkClusterTests, cls ).tearDownClass( )
+
 
     def test_wordcount( self ):
         self._create_cluster( )
@@ -141,8 +147,10 @@ class SparkClusterTests( BaseSparkClusterTests ):
     Covers the creation of a Spark v1.x cluster from scratch and running a simple Spark job on it.
     Also covers persistant HDFS between two cluster incarnations.
     """
-    __test__ = True
-    node = SparkBox.role( )
+
+    @classmethod
+    def initNode( cls ):
+        cls.node = SparkBox.role( )
 
 
 class Spark2ClusterTests( BaseSparkClusterTests ):
@@ -150,5 +158,7 @@ class Spark2ClusterTests( BaseSparkClusterTests ):
     Covers the creation of a Spark v2.x cluster from scratch and running a simple Spark job on it.
     Also covers persistant HDFS between two cluster incarnations.
     """
-    __test__ = True
-    node = Spark2Box.role( )
+
+    @classmethod
+    def initNode( cls ):
+        cls.node = Spark2Box.role( )
